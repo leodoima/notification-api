@@ -1,20 +1,25 @@
 package com.notificationapi.service;
 
-import com.notificationapi.dto.InputResquestSms;
+import com.notificationapi.dto.ResponseSmsDto;
+import com.notificationapi.dto.ResquestSmsDto;
 import com.notificationapi.enums.SmsType;
 import com.notificationapi.model.sms.SmsTokenModel;
-import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class SmsService {
 
-    public void smsRecover(InputResquestSms inputResquestSms) {
-        SmsTokenModel sms = new SmsTokenModel(inputResquestSms.phoneNumber(), SmsType.RECOVER_ACCOUNT_TOKEN, inputResquestSms.ownerRequest());
+    @Autowired
+    TotalVoiceService totalVoiceService;
 
+    public ResponseSmsDto smsRecover(ResquestSmsDto resquestSmsDto) {
+        SmsTokenModel smsRequest = new SmsTokenModel(resquestSmsDto.phoneNumber(), SmsType.RECOVER_ACCOUNT_TOKEN, resquestSmsDto.ownerRequest());
+        // salvar smsRequest
+        return totalVoiceService.sendSms(smsRequest);
     }
 
-    public void smsValidate(InputResquestSms inputResquestSms) {
+    public void smsValidate(ResquestSmsDto resquestSmsDto) {
     }
 
-    public void smsCreateAccount(InputResquestSms inputResquestSms) {
+    public void smsCreateAccount(ResquestSmsDto resquestSmsDto) {
     }
 }
