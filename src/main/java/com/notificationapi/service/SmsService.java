@@ -5,7 +5,9 @@ import com.notificationapi.dto.ResquestSmsDto;
 import com.notificationapi.enums.SmsType;
 import com.notificationapi.model.sms.SmsTokenModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class SmsService {
 
     @Autowired

@@ -27,12 +27,15 @@ public class TotalVoiceService {
             Sms sms = new Sms(totalVoiceClient);
 
             JSONObject result = sms.enviar(smsModel.getPhoneNumber(), smsModel.messageDescription());
+            System.out.println(result);
             responseSmsDto = convertReturnSms(result);
+            System.out.println(responseSmsDto);
 
         } catch (Exception ex) {
             new Exception(ex.getMessage());
         } finally {
             setSendStatus(responseSmsDto, smsModel);
+            System.out.println(smsModel);
             // salvar smsModel
         }
         return responseSmsDto;
