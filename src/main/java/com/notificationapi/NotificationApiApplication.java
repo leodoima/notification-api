@@ -1,7 +1,6 @@
 package com.notificationapi;
 
-import com.notificationapi.enums.SmsType;
-import com.notificationapi.model.sms.SmsTokenModel;
+import com.notificationapi.service.TotalVoiceService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -11,5 +10,4 @@ public class NotificationApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(NotificationApiApplication.class, args);
     }
-
 }
