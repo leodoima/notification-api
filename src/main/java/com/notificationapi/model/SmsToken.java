@@ -1,19 +1,18 @@
-package com.notificationapi.model.sms;
+package com.notificationapi.model;
 
 import com.notificationapi.enums.OwnerRequest;
 import com.notificationapi.enums.SmsType;
-import com.notificationapi.model.token.TokenModel;
 import lombok.*;
 
 @Getter
 @Setter
-public class SmsTokenModel extends SmsModel {
+public class SmsToken extends Sms {
 
-    private TokenModel token;
+    private Token token;
 
-    public SmsTokenModel(String phoneNumber, SmsType smsType, OwnerRequest ownerRequest) {
+    public SmsToken(String phoneNumber, SmsType smsType, OwnerRequest ownerRequest) {
         super(phoneNumber, smsType, ownerRequest);
-        this.token = new TokenModel();
+        this.token = new Token();
     }
 
     @Override

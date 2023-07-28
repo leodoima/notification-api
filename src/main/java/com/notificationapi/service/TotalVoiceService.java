@@ -1,10 +1,9 @@
 package com.notificationapi.service;
 
 import br.com.totalvoice.TotalVoiceClient;
-import br.com.totalvoice.api.Sms;
 import com.notificationapi.dto.ResponseSmsDto;
 import com.notificationapi.enums.StatusSendNotification;
-import com.notificationapi.model.sms.SmsModel;
+import com.notificationapi.model.Sms;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,12 +18,12 @@ public class TotalVoiceService {
         this.tokenTotalVoice = myValue;
     }
 
-    public ResponseSmsDto sendSms(SmsModel smsModel) {
+    public ResponseSmsDto sendSms(Sms smsModel) {
         ResponseSmsDto responseSmsDto = null;
 
         try {
             TotalVoiceClient totalVoiceClient = new TotalVoiceClient(tokenTotalVoice);
-            Sms sms = new Sms(totalVoiceClient);
+            br.com.totalvoice.api.Sms sms = new br.com.totalvoice.api.Sms(totalVoiceClient);
 
             JSONObject result = sms.enviar(smsModel.getPhoneNumber(), smsModel.messageDescription());
             System.out.println(result);
@@ -45,14 +44,14 @@ public class TotalVoiceService {
         return new ResponseSmsDto((String) jsonObject.get("mensagem"), (Integer) jsonObject.get("status"));
     }
 
-    private SmsModel setSendStatus(ResponseSmsDto responseSmsDto, SmsModel smsModel) {
+    private Sms setSendStatus(ResponseSmsDto responseSmsDto, Sms sms) {
         switch (responseSmsDto.statusCode()) {
             case 200:
-                smsModel.setStatusSendNotification(StatusSendNotification.SUCCESS);
-                return smsModel;
+                sms.setStatusSendNotification(StatusSendNotification.SUCCESS);
+                return sms;
             default:
-                smsModel.setStatusSendNotification(StatusSendNotification.ERROR);
-                return smsModel;
+                sms.setStatusSendNotification(StatusSendNotification.ERROR);
+                return sms;
         }
     }
 }

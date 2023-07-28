@@ -1,11 +1,16 @@
-package com.notificationapi.model.sms;
+package com.notificationapi.model;
 
 import com.notificationapi.enums.OwnerRequest;
 import com.notificationapi.enums.SmsType;
+import com.notificationapi.model.Sms;
+import lombok.*;
 
-public class SmsWarningModel extends SmsModel {
 
-    public SmsWarningModel(String phoneNumber, SmsType smsType, OwnerRequest ownerRequest) {
+@Getter
+@Setter
+public class SmsWarning extends Sms {
+
+    public SmsWarning(String phoneNumber, SmsType smsType, OwnerRequest ownerRequest) {
         super(phoneNumber, smsType, ownerRequest);
     }
 

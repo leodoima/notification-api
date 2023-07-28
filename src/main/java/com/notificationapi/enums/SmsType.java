@@ -9,7 +9,7 @@ public enum SmsType {
     SmsType(String messageDescription) {
     }
 
-    public String getSmsType(){
+    public String getSmsType() {
         return this.name();
     }
 }

@@ -3,7 +3,7 @@ package com.notificationapi.service;
 import com.notificationapi.dto.ResponseSmsDto;
 import com.notificationapi.dto.ResquestSmsDto;
 import com.notificationapi.enums.SmsType;
-import com.notificationapi.model.sms.SmsTokenModel;
+import com.notificationapi.model.SmsToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class SmsService {
     TotalVoiceService totalVoiceService;
 
     public ResponseSmsDto smsRecover(ResquestSmsDto resquestSmsDto) {
-        SmsTokenModel smsRequest = new SmsTokenModel(resquestSmsDto.phoneNumber(), SmsType.RECOVER_ACCOUNT_TOKEN, resquestSmsDto.ownerRequest());
+        SmsToken smsRequest = new SmsToken(resquestSmsDto.phoneNumber(), SmsType.RECOVER_ACCOUNT_TOKEN, resquestSmsDto.ownerRequest());
         // salvar smsRequest
         return totalVoiceService.sendSms(smsRequest);
     }

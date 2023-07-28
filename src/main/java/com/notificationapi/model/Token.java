@@ -1,5 +1,6 @@
-package com.notificationapi.model.token;
+package com.notificationapi.model;
 
+import com.notificationapi.enums.TokenStatus;
 import lombok.*;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
@@ -12,7 +13,9 @@ import static java.util.Calendar.HOUR;
 @Data
 @Getter
 @Setter
-public class TokenModel {
+public class Token {
+
+    private static final Integer HOURS_EXPIRATION_CODE = 2;
 
     private UUID id;
 
@@ -24,15 +27,16 @@ public class TokenModel {
 
     private Date expirationAt;
 
-    private static final Integer HOURS_EXPIRATION_CODE = 2;
+    private TokenStatus tokenStatus;
 
 
-    public TokenModel() {
+    public Token() {
         this.id = UUID.randomUUID();
         this.contentCode = this.generateToken();
         this.hashToken = this.cryptToken();
         this.createdAt = new Date();
         this.expirationAt = this.timeExpiration();
+        this.tokenStatus = TokenStatus.CREATED;
     }
 
     private String generateToken() {

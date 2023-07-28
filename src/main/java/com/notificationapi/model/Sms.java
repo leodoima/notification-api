@@ -1,14 +1,15 @@
-package com.notificationapi.model.sms;
+package com.notificationapi.model;
 
 import com.notificationapi.enums.OwnerRequest;
 import com.notificationapi.enums.SmsType;
 import com.notificationapi.enums.StatusSendNotification;
+import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 
-@Data
 @Getter
 @Setter
-public abstract class SmsModel {
+@MappedSuperclass
+public abstract class Sms {
 
     private Long id;
     private SmsType smsType;
@@ -16,7 +17,7 @@ public abstract class SmsModel {
     private OwnerRequest ownerRequest;
     private StatusSendNotification statusSendNotification;
 
-    public SmsModel(String phoneNumber, SmsType smsType, OwnerRequest ownerRequest) {
+    public Sms(String phoneNumber, SmsType smsType, OwnerRequest ownerRequest) {
         this.smsType = smsType;
         this.phoneNumber = phoneNumber;
         this.ownerRequest = ownerRequest;
@@ -25,3 +26,4 @@ public abstract class SmsModel {
 
     public abstract String messageDescription();
 }
+
