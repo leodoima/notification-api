@@ -8,18 +8,16 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.Random;
-import java.util.UUID;
-
-import static java.util.Calendar.HOUR;
 
 @Getter
 @Setter
 @Entity
 public class Token {
 
-    private static final Integer HOURS_EXPIRATION_CODE = 2;
+    private static final Integer ADD_SECONDS_EXPIRATION_CODE = 7200;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +30,6 @@ public class Token {
     @NotBlank
     private String hashToken;
 
-    @CreatedDate
     @NotNull
     private Date createdAt;
 
@@ -59,7 +56,7 @@ public class Token {
     }
 
     private Date timeExpiration() {
-        return new Date(this.createdAt.getTime() + HOURS_EXPIRATION_CODE * HOUR);
+        return Date.from(Instant.now().plusSeconds(ADD_SECONDS_EXPIRATION_CODE));
     }
 
     private String cryptToken() {

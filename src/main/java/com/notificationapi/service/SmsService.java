@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 import static org.springframework.security.crypto.bcrypt.BCrypt.hashpw;
 
 @Service
@@ -46,7 +48,7 @@ public class SmsService {
     public ResponseSmsDto tokenValidate(RequestSmsTokenValidateDto request) {
         LOGGER.info("Find token validate for phone number {}", request.phoneNumber());
 
-        var sms = smsRepository.findByPhoneNumber(request.phoneNumber());
+        Sms sms = smsRepository.findById(1L).get();
 
         if (sms == null) {
             LOGGER.info("Find token by phone return null");
