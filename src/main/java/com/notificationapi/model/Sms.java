@@ -1,29 +1,49 @@
 package com.notificationapi.model;
 
-import com.notificationapi.enums.OwnerRequest;
-import com.notificationapi.enums.SmsType;
-import com.notificationapi.enums.StatusSendNotification;
-import jakarta.persistence.MappedSuperclass;
+import com.notificationapi.enums.OwnerRequestEnum;
+import com.notificationapi.enums.SmsTypeEnum;
+import com.notificationapi.enums.SmsStatusSendEnum;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@MappedSuperclass
-public abstract class Sms {
+@Builder
+@Entity
+public class Sms {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private SmsType smsType;
+
+    @OneToOne(cascade=CascadeType.PERSIST)
+    @JoinColumn(name = "token_id", referencedColumnName = "id")
+    private Token token;
+
+    @NotBlank
     private String phoneNumber;
-    private OwnerRequest ownerRequest;
-    private StatusSendNotification statusSendNotification;
 
-    public Sms(String phoneNumber, SmsType smsType, OwnerRequest ownerRequest) {
-        this.smsType = smsType;
-        this.phoneNumber = phoneNumber;
-        this.ownerRequest = ownerRequest;
-        this.statusSendNotification = StatusSendNotification.REQUEST;
-    }
+    @Transient
+    @NotBlank
+    private String messageContent;
 
-    public abstract String messageDescription();
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    @Column(name = "sms_type")
+    private SmsTypeEnum smsTypeEnum;
+
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    @Column(name = "owner_request")
+    private OwnerRequestEnum ownerRequestEnum;
+
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    @Column(name = "sms_status_send")
+    private SmsStatusSendEnum smsStatusSendEnum;
 }
 

@@ -2,42 +2,61 @@ package com.notificationapi.service;
 
 import br.com.totalvoice.TotalVoiceClient;
 import com.notificationapi.dto.ResponseSmsDto;
-import com.notificationapi.enums.StatusSendNotification;
+import com.notificationapi.enums.SmsStatusSendEnum;
 import com.notificationapi.model.Sms;
+import com.notificationapi.repository.SmsRepository;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TotalVoiceService {
 
-    private static String tokenTotalVoice;
+    private static final Logger LOGGER = LoggerFactory.getLogger(TotalVoiceService.class);
+
+    @Autowired
+    private SmsRepository smsRepository;
 
     @Value("${api.total.voice.token}")
-    private void setTokenTotalVoice(String myValue) {
-        this.tokenTotalVoice = myValue;
-    }
+    private String tokenTotalVoice;
 
     public ResponseSmsDto sendSms(Sms smsModel) {
+
+        LOGGER.info("Initializing message sending execution to {} to number {}", smsModel.getSmsTypeEnum().getMessageDescription(), smsModel.getPhoneNumber());
+
         ResponseSmsDto responseSmsDto = null;
 
         try {
             TotalVoiceClient totalVoiceClient = new TotalVoiceClient(tokenTotalVoice);
-            br.com.totalvoice.api.Sms sms = new br.com.totalvoice.api.Sms(totalVoiceClient);
+            br.com.totalvoice.api.Sms smsTotalVoice = new br.com.totalvoice.api.Sms(totalVoiceClient);
 
-            JSONObject result = sms.enviar(smsModel.getPhoneNumber(), smsModel.messageDescription());
-            System.out.println(result);
+            JSONObject result = smsTotalVoice.enviar(smsModel.getPhoneNumber(), smsModel.getMessageContent());
             responseSmsDto = convertReturnSms(result);
-            System.out.println(responseSmsDto);
+            
+            LOGGER.info("Result after processed TotalVoice.enviar(): {}", result);
 
         } catch (Exception ex) {
-            new Exception(ex.getMessage());
+            smsModel.setSmsStatusSendEnum(SmsStatusSendEnum.ERROR);
+            LOGGER.info("Exception error to operate a TotalVoice. {}", ex);
         } finally {
-            setSendStatus(responseSmsDto, smsModel);
-            System.out.println(smsModel);
-            // salvar smsModel
+
+            if (smsModel.getSmsStatusSendEnum().equals(SmsStatusSendEnum.REQUEST)) {
+                setSendStatus(responseSmsDto, smsModel);
+            }
+
+            if (responseSmsDto == null) {
+                responseSmsDto = new ResponseSmsDto("Internal error to send a sms", 500);
+            }
+
+            smsRepository.save(smsModel);
+
+            LOGGER.info("Finaly processed sms for TotalVoice");
+
+            return responseSmsDto;
         }
-        return responseSmsDto;
     }
 
     private ResponseSmsDto convertReturnSms(JSONObject jsonObject) {
@@ -47,10 +66,10 @@ public class TotalVoiceService {
     private Sms setSendStatus(ResponseSmsDto responseSmsDto, Sms sms) {
         switch (responseSmsDto.statusCode()) {
             case 200:
-                sms.setStatusSendNotification(StatusSendNotification.SUCCESS);
+                sms.setSmsStatusSendEnum(SmsStatusSendEnum.SUCCESS);
                 return sms;
             default:
-                sms.setStatusSendNotification(StatusSendNotification.ERROR);
+                sms.setSmsStatusSendEnum(SmsStatusSendEnum.ERROR);
                 return sms;
         }
     }

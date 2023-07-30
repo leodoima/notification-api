@@ -1,7 +1,11 @@
 package com.notificationapi.model;
 
-import com.notificationapi.enums.TokenStatus;
+import com.notificationapi.enums.TokenStatusEnum;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.util.Date;
@@ -10,33 +14,43 @@ import java.util.UUID;
 
 import static java.util.Calendar.HOUR;
 
-@Data
 @Getter
 @Setter
+@Entity
 public class Token {
 
     private static final Integer HOURS_EXPIRATION_CODE = 2;
 
-    private UUID id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private String hashToken;
-
+    @Transient
+    @NotBlank
     private String contentCode;
 
+    @NotBlank
+    private String hashToken;
+
+    @CreatedDate
+    @NotNull
     private Date createdAt;
 
+    @NotNull
     private Date expirationAt;
 
-    private TokenStatus tokenStatus;
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    @Column(name = "token_status")
+    private TokenStatusEnum tokenStatusEnum;
 
 
     public Token() {
-        this.id = UUID.randomUUID();
         this.contentCode = this.generateToken();
         this.hashToken = this.cryptToken();
         this.createdAt = new Date();
         this.expirationAt = this.timeExpiration();
-        this.tokenStatus = TokenStatus.CREATED;
+        this.tokenStatusEnum = TokenStatusEnum.CREATED;
     }
 
     private String generateToken() {
@@ -45,7 +59,7 @@ public class Token {
     }
 
     private Date timeExpiration() {
-        return new Date(this.getCreatedAt().getTime() + HOURS_EXPIRATION_CODE * HOUR);
+        return new Date(this.createdAt.getTime() + HOURS_EXPIRATION_CODE * HOUR);
     }
 
     private String cryptToken() {
@@ -53,7 +67,7 @@ public class Token {
     }
 
     public boolean isTokenExpired() {
-        return this.getExpirationAt().before(new Date());
+        return this.expirationAt.before(new Date());
     }
 
     public boolean isTokenValid(String contentCode) {

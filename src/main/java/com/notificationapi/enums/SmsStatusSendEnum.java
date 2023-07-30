@@ -1,6 +1,6 @@
 package com.notificationapi.enums;
 
-public enum StatusSendNotification {
+public enum SmsStatusSendEnum {
     SUCCESS,
     ERROR,
     REQUEST

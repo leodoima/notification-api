@@ -1,6 +1,6 @@
 package com.notificationapi.enums;
 
-public enum OwnerRequest {
+public enum OwnerRequestEnum {
     NAME_API,
     DEFAULT
 }

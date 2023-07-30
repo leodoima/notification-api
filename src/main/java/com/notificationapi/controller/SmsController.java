@@ -1,7 +1,9 @@
 package com.notificationapi.controller;
 
+import com.notificationapi.dto.RequestSmsTokenDto;
+import com.notificationapi.dto.RequestSmsTokenValidateDto;
 import com.notificationapi.dto.ResponseSmsDto;
-import com.notificationapi.dto.ResquestSmsDto;
+import com.notificationapi.enums.SmsTypeEnum;
 import com.notificationapi.service.SmsService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +17,21 @@ public class SmsController {
     @Autowired
     private SmsService smsService;
 
-    @PostMapping("/recover")
-    public ResponseEntity<ResponseSmsDto> recover(@RequestBody @Valid ResquestSmsDto resquestSmsDto) {
-        ResponseSmsDto responseSmsDto = smsService.smsRecover(resquestSmsDto);
+    @PostMapping("/token/account/recover")
+    public ResponseEntity<ResponseSmsDto> accountRecover(@RequestBody @Valid RequestSmsTokenDto requestSmsTokenDto) {
+        var responseSmsDto = smsService.requestToken(SmsTypeEnum.RECOVER_ACCOUNT_TOKEN, requestSmsTokenDto);
+        return ResponseEntity.status(responseSmsDto.statusCode()).body(responseSmsDto);
+    }
+
+    @PostMapping("/token/phone/confirm")
+    public ResponseEntity<ResponseSmsDto> phoneValidate(@RequestBody @Valid RequestSmsTokenDto requestSmsTokenDto) {
+        var responseSmsDto = smsService.requestToken(SmsTypeEnum.CONFIRM_PHONE_NUMBER_TOKEN, requestSmsTokenDto);
+        return ResponseEntity.status(responseSmsDto.statusCode()).body(responseSmsDto);
+    }
+
+    @PostMapping("/token/validate")
+    public ResponseEntity<ResponseSmsDto> tokenValidate(@RequestBody @Valid RequestSmsTokenValidateDto requestValidateDto) {
+        var responseSmsDto = smsService.tokenValidate(requestValidateDto);
         return ResponseEntity.status(responseSmsDto.statusCode()).body(responseSmsDto);
     }
 }

@@ -1,6 +1,6 @@
 package com.notificationapi.enums;
 
-public enum TokenStatus {
+public enum TokenStatusEnum {
     CREATED,
     VALIDATED
 }
