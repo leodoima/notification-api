@@ -3,8 +3,7 @@ package com.notificationapi.service;
 import com.notificationapi.dto.RequestSmsTokenDto;
 import com.notificationapi.dto.RequestSmsTokenValidateDto;
 import com.notificationapi.enums.SmsTypeEnum;
-import com.notificationapi.model.Sms;
-import com.notificationapi.model.SmsBuilder;
+import com.notificationapi.builder.SmsBuilder;
 import com.notificationapi.dto.ResponseSmsDto;
 import com.notificationapi.dto.ResquestSmsDefaultDto;
 
@@ -12,10 +11,7 @@ import com.notificationapi.repository.SmsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 import static org.springframework.security.crypto.bcrypt.BCrypt.hashpw;
 
@@ -32,14 +28,7 @@ public class SmsService {
     private SmsBuilder smsBuilder;
 
     public ResponseSmsDto requestToken(SmsTypeEnum smsTypeEnum, RequestSmsTokenDto request) {
-        Sms smsRequest = smsBuilder.smsTokenBuilder(smsTypeEnum, request);
-        smsRepository.save(smsRequest);
-
-        return totalVoiceService.sendSms(smsRequest);
-    }
-
-    public ResponseSmsDto smsDefault(SmsTypeEnum smsTypeEnum, ResquestSmsDefaultDto request) {
-        Sms smsRequest = smsBuilder.smsDefaultBuilder(smsTypeEnum, request);
+        var smsRequest = smsBuilder.smsToken(smsTypeEnum, request);
         smsRepository.save(smsRequest);
 
         return totalVoiceService.sendSms(smsRequest);
@@ -48,7 +37,7 @@ public class SmsService {
     public ResponseSmsDto tokenValidate(RequestSmsTokenValidateDto request) {
         LOGGER.info("Find token validate for phone number {}", request.phoneNumber());
 
-        Sms sms = smsRepository.findById(1L).get();
+        var sms = smsRepository.findById(1L).get();
 
         if (sms == null) {
             LOGGER.info("Find token by phone return null");

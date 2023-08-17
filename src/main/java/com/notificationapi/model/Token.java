@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.time.Instant;
@@ -42,6 +41,7 @@ public class Token {
     private TokenStatusEnum tokenStatusEnum;
 
 
+    @Builder
     public Token() {
         this.contentCode = this.generateToken();
         this.hashToken = this.cryptToken();

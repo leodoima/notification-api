@@ -1,16 +1,21 @@
-package com.notificationapi.model;
+package com.notificationapi.builder;
 
 import com.notificationapi.dto.RequestSmsTokenDto;
 import com.notificationapi.dto.ResquestSmsDefaultDto;
 import com.notificationapi.enums.OwnerRequestEnum;
 import com.notificationapi.enums.SmsTypeEnum;
 import com.notificationapi.enums.SmsStatusSendEnum;
+import com.notificationapi.model.Sms;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SmsBuilder {
 
-    public Sms smsDefaultBuilder(SmsTypeEnum smsTypeEnum, ResquestSmsDefaultDto resquestSmsDefaultDto) {
+    @Autowired
+    private TokenBuilder tokenBuilder;
+
+    public Sms smsDefault(SmsTypeEnum smsTypeEnum, ResquestSmsDefaultDto resquestSmsDefaultDto) {
         return Sms.builder()
                 .smsTypeEnum(smsTypeEnum)
                 .token(null)
@@ -21,9 +26,9 @@ public class SmsBuilder {
                 .build();
     }
 
-    public Sms smsTokenBuilder(SmsTypeEnum smsTypeEnum, RequestSmsTokenDto requestSmsTokenDto) {
+    public Sms smsToken(SmsTypeEnum smsTypeEnum, RequestSmsTokenDto requestSmsTokenDto) {
 
-        Token token = new Token();
+        var token = tokenBuilder.createToken();
 
         String messageContent = smsTypeEnum.getMessageDescription() + token.getContentCode();
 
