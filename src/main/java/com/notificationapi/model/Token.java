@@ -11,6 +11,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.Random;
 
+
 @Getter
 @Setter
 @Entity
@@ -23,7 +24,6 @@ public class Token {
     private Long id;
 
     @Transient
-    @NotBlank
     private String contentCode;
 
     @NotBlank
@@ -41,13 +41,21 @@ public class Token {
     private TokenStatusEnum tokenStatusEnum;
 
 
-    @Builder
+    @Builder(toBuilder = true)
     public Token() {
         this.contentCode = this.generateToken();
         this.hashToken = this.cryptToken();
         this.createdAt = new Date();
         this.expirationAt = this.timeExpiration();
         this.tokenStatusEnum = TokenStatusEnum.CREATED;
+    }
+
+    public Token(Long id, String hashToken, Date createdAt, Date expirationAt, TokenStatusEnum tokenStatusEnum) {
+        this.id = id;
+        this.hashToken = hashToken;
+        this.createdAt = createdAt;
+        this.expirationAt = expirationAt;
+        this.tokenStatusEnum = tokenStatusEnum;
     }
 
     private String generateToken() {
@@ -63,11 +71,19 @@ public class Token {
         return BCrypt.hashpw(this.contentCode, BCrypt.gensalt());
     }
 
-    public boolean isTokenExpired() {
+    private boolean isTokenExpired() {
         return this.expirationAt.before(new Date());
     }
 
-    public boolean isTokenValid(String contentCode) {
+    private boolean isTokenPending() {
+        return this.tokenStatusEnum.equals(TokenStatusEnum.CREATED);
+    }
+
+    public boolean isTokenValid() {
+        return isTokenPending() && !isTokenExpired();
+    }
+
+    public boolean isTokenChecked(String contentCode) {
         return BCrypt.checkpw(contentCode, this.hashToken);
     }
 }

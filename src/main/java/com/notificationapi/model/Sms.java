@@ -20,7 +20,7 @@ public class Sms {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade=CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "token_id", referencedColumnName = "id")
     private Token token;
 
