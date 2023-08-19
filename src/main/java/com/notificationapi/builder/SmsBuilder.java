@@ -9,22 +9,13 @@ import com.notificationapi.model.Sms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class SmsBuilder {
 
     @Autowired
     private TokenBuilder tokenBuilder;
-
-    public Sms smsDefault(SmsTypeEnum smsTypeEnum, ResquestSmsDefaultDto resquestSmsDefaultDto) {
-        return Sms.builder()
-                .smsTypeEnum(smsTypeEnum)
-                .token(null)
-                .ownerRequestEnum(OwnerRequestEnum.DEFAULT)
-                .phoneNumber(resquestSmsDefaultDto.phoneNumber())
-                .messageContent(smsTypeEnum.getMessageDescription())
-                .smsStatusSendEnum(SmsStatusSendEnum.REQUEST)
-                .build();
-    }
 
     public Sms smsToken(SmsTypeEnum smsTypeEnum, RequestSmsTokenDto requestSmsTokenDto) {
 
@@ -35,6 +26,7 @@ public class SmsBuilder {
         return Sms.builder()
                 .smsTypeEnum(smsTypeEnum)
                 .token(token)
+                .createdAt(new Date())
                 .ownerRequestEnum(OwnerRequestEnum.DEFAULT)
                 .phoneNumber(requestSmsTokenDto.phoneNumber())
                 .messageContent(messageContent)

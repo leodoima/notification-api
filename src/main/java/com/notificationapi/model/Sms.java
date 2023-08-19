@@ -7,6 +7,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,6 +33,10 @@ public class Sms {
     @Transient
     @NotBlank
     private String messageContent;
+
+    @NotNull
+    @CreatedDate
+    private Date createdAt;
 
     @Enumerated(EnumType.STRING)
     @NotNull

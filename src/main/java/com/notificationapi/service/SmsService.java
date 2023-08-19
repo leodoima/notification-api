@@ -45,14 +45,13 @@ public class SmsService {
 
         var token = tokenRepository.findLastTokenForNumber(request.phoneNumber());
 
-        if (!checkToken(token)) {
-            return new ResponseSmsDto("Token is not valid", 401);
-        }
+        if (!checkToken(token)) return new ResponseSmsDto("Token is not valid", 401);
+
 
         if (token.isTokenChecked(request.contentToken())) {
             LOGGER.info("Token is valid for phone number {}", request.phoneNumber());
-            token.setTokenStatusEnum(TokenStatusEnum.VALIDATED);
 
+            token.setTokenStatusEnum(TokenStatusEnum.VALIDATED);
             tokenRepository.save(token);
 
             return new ResponseSmsDto("Token is valid", 200);
