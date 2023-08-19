@@ -5,11 +5,13 @@ plugins {
 }
 
 group = 'com'
-version = '0.0.1-SNAPSHOT'
+
 
 java {
 	sourceCompatibility = '17'
 }
+
+
 
 configurations {
 	compileOnly {
@@ -37,6 +39,4 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
-}
+tasks.named('bootJar') {     launchScript() }
