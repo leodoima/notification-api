@@ -4,7 +4,10 @@ Aplicação que disponibiliza recursos para envio de notificações via celular 
 
 * O objetivo é fornecer uma api para envio de notificações específicas, tais como: *token para validações de telefone/e-mail, autenticação de dois fatores no acesso à conta, etc*.
 
+</br>
+
 ```mermaid
+sequenceDiagram
 App ->> Notification-Api: accountRecover / phoneValidate
 Notification-Api->>Zenvia: sendSms()
 Zenvia-->> Client: Enviar SMS
@@ -24,6 +27,8 @@ Descrição dos principais itens contidos no desenvolvimento da aplicação:
 * Gradle
 * Spring Boot
 * [Zenvia](https://www.zenvia.com/) (api externa de comunicação)
+
+</br>
 
 ### Executar
 Sequência de passos para executar a aplicação:
@@ -46,6 +51,8 @@ $ npm start
 $ http://localhost:3333/
 
 ```
+
+</br>
 
 ### Melhorias futuras
 Ideias de como evoluir esta aplicação:
