@@ -31,25 +31,21 @@ Descrição dos principais itens contidos no desenvolvimento da aplicação:
 </br>
 
 ### Executar
-Sequência de passos para executar a aplicação:
+Sequência de passos para executar a aplicação: </br>
+- **Requisitos:** *Docker e Docker Compose*
 
 ```bash
 # Clonar repositório
-$ git clone https://github.com/leodoima/sms-app.git
+$ git clone https://github.com/leodoima/notification-api.git
 
 # Ir para pasta raiz do projeto
-$ cd sms-app
+$ cd notification-api
 
-# Configurar variáveis de ambiente 
-Renomear arquivo .env.example para .env
-Alterar o conteúdo das chaves para aqueles desejados
+# Configurar variáveis de ambiente no arquivo
+$ src/main/resources/application.properties
 
-# Rodar a aplicação
-$ npm start
-
-# Testar a aplicação
-$ http://localhost:3333/
-
+# Rodar docker
+$ docker compose up --build
 ```
 
 </br>
@@ -57,7 +53,8 @@ $ http://localhost:3333/
 ### Melhorias futuras
 Ideias de como evoluir esta aplicação:
 
-- [ ] Aplicar ennvio de e-mail
-- [ ] Implementar recurso para documentação da api
+- [ ] Implementar recurso de Health Check
+- [ ] Aplicar envio de e-mail
+- [ ] Implementar recurso para documentação da API
 - [ ] Aplicar testes unitários
 - [ ] Implementar uso de filas para controle de requisições
