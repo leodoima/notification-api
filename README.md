@@ -17,7 +17,7 @@ Notification-Api -->> App: Status do envio
 
 </br>
 
-### Recursos e tecnologias
+### Recursos
 Descrição dos principais itens contidos no desenvolvimento da aplicação:
 
 * Docker
@@ -41,10 +41,10 @@ $ git clone https://github.com/leodoima/notification-api.git
 # Ir para pasta raiz do projeto
 $ cd notification-api
 
-# Configurar variáveis de ambiente no arquivo
+# Configurar variável de ambiente Total Voice (obrigatória, demais possuem valor default)
 $ src/main/resources/application.properties
 
-# Rodar docker
+# Rodar Docker (fará a construção do artefato, criará recursos database, executará aplicação)
 $ docker compose up --build
 ```
 
