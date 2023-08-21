@@ -25,7 +25,7 @@ public class TotalVoiceService {
 
     public ResponseSmsDto sendSms(Sms smsModel) {
 
-        LOGGER.info("Initializing message sending execution to {} to number {}", smsModel.getSmsTypeEnum().getMessageDescription(), smsModel.getPhoneNumber());
+        LOGGER.info("Initializing message sending execution to {} to number {}", smsModel.getSmsTypeEnum(), smsModel.getPhoneNumber());
 
         ResponseSmsDto responseSmsDto = null;
 

@@ -1,0 +1,1 @@
+alter table sms modify column created_at datetime not null;

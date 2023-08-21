@@ -1,19 +1,15 @@
 version: '3.1'
 
 services:
-
   db:
-    image: mysql
+    image: mysql:8.1
     container_name: notification-api-db
-    command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
       MYSQL_DATABASE: ${DB_MYSQL_SCHEMA:-notification-db}
       MYSQL_ROOT_PASSWORD: ${DB_MYSQL_PASSWORD:-rootdb}
     ports:
-        - 3306:3306
-    expose:
-      - 3306
+      - "3306:3306"
     networks:
       - notification-lan
     healthcheck:
@@ -27,11 +23,12 @@ services:
     networks:
       - notification-lan
     depends_on:
-      #- db
       db:
         condition: service_healthy
     ports:
-      - 8080:8080
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/${DB_MYSQL_SCHEMA:-notification-db}?autoReconnect=true&useSSL=false
 
 networks:
   notification-lan:
