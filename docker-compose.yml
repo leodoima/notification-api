@@ -2,19 +2,37 @@ version: '3.1'
 
 services:
 
-  app:
-    build: .
-    container_name: notification-api-app
-    ports:
-      - 8080:8080
-
   db:
     image: mysql
     container_name: notification-api-db
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
-      MYSQL_DATABASE: 'notification-db'
-      MYSQL_ROOT_PASSWORD: ${DB_MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${DB_MYSQL_SCHEMA:-notification-db}
+      MYSQL_ROOT_PASSWORD: ${DB_MYSQL_PASSWORD:-rootdb}
     ports:
         - 3306:3306
+    expose:
+      - 3306
+    networks:
+      - notification-lan
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+
+  app:
+    build: .
+    container_name: notification-api-app
+    networks:
+      - notification-lan
+    depends_on:
+      #- db
+      db:
+        condition: service_healthy
+    ports:
+      - 8080:8080
+
+networks:
+  notification-lan:
+    driver: bridge
