@@ -8,7 +8,7 @@ Aplicação que disponibiliza recursos para envio de notificações via celular 
 
 ```mermaid
 sequenceDiagram
-App ->> Notification-Api: accountRecover / phoneValidate
+App ->> Notification-Api: accountRecover / phoneValidate / 2FA
 Notification-Api->>Zenvia: sendSms()
 Zenvia-->> Client: Enviar SMS
 Zenvia-->> Notification-Api: Resposta do envio
