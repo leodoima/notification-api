@@ -20,6 +20,10 @@ public class Token {
 
     private static final Integer ADD_SECONDS_EXPIRATION_CODE = 7200;
 
+    private static final Integer MAX_VALUE_TOKEN = 999999;
+
+    private static final Integer MIN_VALUE_TOKEN = 100000;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -62,7 +66,7 @@ public class Token {
 
     private String generateToken() {
         Random random = new Random();
-        return String.valueOf(random.nextInt(999999));
+        return String.valueOf(random.nextInt(MIN_VALUE_TOKEN, MAX_VALUE_TOKEN));
     }
 
     private Date timeExpiration() {
