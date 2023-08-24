@@ -35,7 +35,7 @@ public class TotalVoiceService {
 
             JSONObject result = smsTotalVoice.enviar(smsModel.getPhoneNumber(), smsModel.getMessageContent());
             responseSmsDto = convertReturnSms(result);
-            
+
             LOGGER.info("Result after processed TotalVoice.enviar(): {}", result);
 
         } catch (Exception ex) {
@@ -54,9 +54,8 @@ public class TotalVoiceService {
             smsRepository.save(smsModel);
 
             LOGGER.info("Finaly processed sms for TotalVoice");
-
-            return responseSmsDto;
         }
+        return responseSmsDto;
     }
 
     private ResponseSmsDto convertReturnSms(JSONObject jsonObject) {

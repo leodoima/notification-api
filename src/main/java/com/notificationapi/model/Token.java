@@ -85,11 +85,7 @@ public class Token {
         return this.tokenStatusEnum.equals(TokenStatusEnum.CREATED);
     }
 
-    public boolean isTokenValid() {
-        return isTokenPending() && !isTokenExpired();
-    }
-
-    public boolean isTokenChecked(String contentCode) {
-        return BCrypt.checkpw(contentCode, this.hashToken);
+    public boolean isTokenValidated(String contentCode) {
+        return isTokenPending() && !isTokenExpired() && BCrypt.checkpw(contentCode, this.hashToken);
     }
 }

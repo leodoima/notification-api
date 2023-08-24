@@ -17,21 +17,15 @@ public class SmsController {
     @Autowired
     private SmsService smsService;
 
-    @PostMapping("/token/account/recover")
+    @PostMapping("/account/recover")
     public ResponseEntity<ResponseSmsDto> accountRecover(@RequestBody @Valid RequestSmsTokenDto requestSmsTokenDto) {
         var responseSmsDto = smsService.requestToken(SmsTypeEnum.RECOVER_ACCOUNT_TOKEN, requestSmsTokenDto);
         return ResponseEntity.status(responseSmsDto.statusCode()).body(responseSmsDto);
     }
 
-    @PostMapping("/token/phone/confirm")
+    @PostMapping("/phone/confirm")
     public ResponseEntity<ResponseSmsDto> phoneValidate(@RequestBody @Valid RequestSmsTokenDto requestSmsTokenDto) {
         var responseSmsDto = smsService.requestToken(SmsTypeEnum.CONFIRM_PHONE_NUMBER_TOKEN, requestSmsTokenDto);
-        return ResponseEntity.status(responseSmsDto.statusCode()).body(responseSmsDto);
-    }
-
-    @PostMapping("/token/validate")
-    public ResponseEntity<ResponseSmsDto> tokenValidate(@RequestBody @Valid RequestSmsTokenValidateDto requestValidateDto) {
-        var responseSmsDto = smsService.tokenValidate(requestValidateDto);
         return ResponseEntity.status(responseSmsDto.statusCode()).body(responseSmsDto);
     }
 }

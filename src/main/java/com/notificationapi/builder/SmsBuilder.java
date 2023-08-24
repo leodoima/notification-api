@@ -1,7 +1,6 @@
 package com.notificationapi.builder;
 
 import com.notificationapi.dto.RequestSmsTokenDto;
-import com.notificationapi.dto.ResquestSmsDefaultDto;
 import com.notificationapi.enums.OwnerRequestEnum;
 import com.notificationapi.enums.SmsTypeEnum;
 import com.notificationapi.enums.SmsStatusSendEnum;
