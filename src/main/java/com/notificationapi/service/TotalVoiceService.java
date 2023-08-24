@@ -5,6 +5,7 @@ import com.notificationapi.dto.ResponseSmsDto;
 import com.notificationapi.enums.SmsStatusSendEnum;
 import com.notificationapi.model.Sms;
 import com.notificationapi.repository.SmsRepository;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,13 +35,13 @@ public class TotalVoiceService {
             br.com.totalvoice.api.Sms smsTotalVoice = new br.com.totalvoice.api.Sms(totalVoiceClient);
 
             JSONObject result = smsTotalVoice.enviar(smsModel.getPhoneNumber(), smsModel.getMessageContent());
-            responseSmsDto = convertReturnSms(result);
-
             LOGGER.info("Result after processed TotalVoice.enviar(): {}", result);
+
+            responseSmsDto = convertReturnSms(result);
 
         } catch (Exception ex) {
             smsModel.setSmsStatusSendEnum(SmsStatusSendEnum.ERROR);
-            LOGGER.info("Exception error to operate a TotalVoice. {}", ex);
+            LOGGER.info("Exception error to operate a TotalVoice. {}", ex.getMessage());
         } finally {
 
             if (smsModel.getSmsStatusSendEnum().equals(SmsStatusSendEnum.REQUEST)) {
@@ -59,7 +60,12 @@ public class TotalVoiceService {
     }
 
     private ResponseSmsDto convertReturnSms(JSONObject jsonObject) {
-        return new ResponseSmsDto((String) jsonObject.get("mensagem"), (Integer) jsonObject.get("status"));
+        try {
+            return new ResponseSmsDto((String) jsonObject.get("mensagem"), (Integer) jsonObject.get("status"));
+        } catch (JSONException ex) {
+            LOGGER.info("Exception error to convert JSON. {}", ex.getMessage());
+            throw new JSONException(ex);
+        }
     }
 
     private Sms setSendStatus(ResponseSmsDto responseSmsDto, Sms sms) {
