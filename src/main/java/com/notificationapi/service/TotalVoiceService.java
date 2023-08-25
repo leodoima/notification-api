@@ -40,17 +40,10 @@ public class TotalVoiceService {
             responseSmsDto = convertReturnSms(result);
 
         } catch (Exception ex) {
-            smsModel.setSmsStatusSendEnum(SmsStatusSendEnum.ERROR);
             LOGGER.info("Exception error to operate a TotalVoice. {}", ex.getMessage());
         } finally {
 
-            if (smsModel.getSmsStatusSendEnum().equals(SmsStatusSendEnum.REQUEST)) {
-                setSendStatus(responseSmsDto, smsModel);
-            }
-
-            if (responseSmsDto == null) {
-                responseSmsDto = new ResponseSmsDto("Internal error to send a sms", 500);
-            }
+            setSendStatus((responseSmsDto != null) ? responseSmsDto.statusCode() : 404, smsModel);
 
             smsRepository.save(smsModel);
 
@@ -68,8 +61,8 @@ public class TotalVoiceService {
         }
     }
 
-    private Sms setSendStatus(ResponseSmsDto responseSmsDto, Sms sms) {
-        switch (responseSmsDto.statusCode()) {
+    private Sms setSendStatus(Integer statusCode, Sms sms) {
+        switch (statusCode) {
             case 200:
                 sms.setSmsStatusSendEnum(SmsStatusSendEnum.SUCCESS);
                 return sms;
