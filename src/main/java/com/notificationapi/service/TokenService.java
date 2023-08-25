@@ -9,12 +9,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class TokenService {
 
     private static final String TOKEN_ACCEPTED = "Token is valid";
 
     private static final String TOKEN_REJECTED = "Token is not valid";
+
 
     @Autowired
     private TokenRepository tokenRepository;

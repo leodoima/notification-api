@@ -1,6 +1,7 @@
 package com.notificationapi.controller;
 
 import com.notificationapi.dto.RequestSmsTokenValidateDto;
+import com.notificationapi.dto.RequestSmsTokenDto;
 import com.notificationapi.dto.ResponseTokenDto;
 import com.notificationapi.service.TokenService;
 import jakarta.validation.Valid;
@@ -22,5 +23,10 @@ public class TokenController {
     public ResponseEntity<ResponseTokenDto> tokenValidate(@RequestBody @Valid RequestSmsTokenValidateDto requestValidateDto) {
         var responsetokenDto = tokenService.tokenValidate(requestValidateDto);
         return ResponseEntity.status(responsetokenDto.statusCode()).body(responsetokenDto);
+    }
+
+    @PostMapping("/account")
+    public void tokenRequest(@RequestBody @Valid RequestSmsTokenDto request){
+
     }
 }

@@ -1,0 +1,1 @@
+alter table sms rename column sms_status_send to status_send;

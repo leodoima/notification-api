@@ -1,31 +1,21 @@
 package com.notificationapi.model;
 
-import com.notificationapi.enums.OwnerRequestEnum;
-import com.notificationapi.enums.SmsTypeEnum;
-import com.notificationapi.enums.SmsStatusSendEnum;
+
+import com.notificationapi.enums.TokenTypeEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
+import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
+import static com.notificationapi.enums.TokenTypeEnum.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @Entity
-public class Sms {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "token_id", referencedColumnName = "id")
-    private Token token;
+public class Sms extends SenderToken {
 
     @NotBlank
     private String phoneNumber;
@@ -33,24 +23,5 @@ public class Sms {
     @Transient
     @NotBlank
     private String messageContent;
-
-    @NotNull
-    @CreatedDate
-    private Date createdAt;
-
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    @Column(name = "sms_type")
-    private SmsTypeEnum smsTypeEnum;
-
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    @Column(name = "owner_request")
-    private OwnerRequestEnum ownerRequestEnum;
-
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    @Column(name = "sms_status_send")
-    private SmsStatusSendEnum smsStatusSendEnum;
 }
 

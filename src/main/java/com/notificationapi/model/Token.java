@@ -8,21 +8,15 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
-import java.time.Instant;
 import java.util.Date;
 import java.util.Random;
 
-
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
 public class Token {
-
-    private static final Integer ADD_SECONDS_EXPIRATION_CODE = 7200;
-
-    private static final Integer MAX_VALUE_TOKEN = 999999;
-
-    private static final Integer MIN_VALUE_TOKEN = 100000;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,16 +40,6 @@ public class Token {
     @Column(name = "token_status")
     private TokenStatusEnum tokenStatusEnum;
 
-
-    @Builder(toBuilder = true)
-    public Token() {
-        this.contentCode = this.generateToken();
-        this.hashToken = this.cryptToken();
-        this.createdAt = new Date();
-        this.expirationAt = this.timeExpiration();
-        this.tokenStatusEnum = TokenStatusEnum.CREATED;
-    }
-
     public Token(Long id, String hashToken, Date createdAt, Date expirationAt, TokenStatusEnum tokenStatusEnum) {
         this.id = id;
         this.hashToken = hashToken;
@@ -64,17 +48,9 @@ public class Token {
         this.tokenStatusEnum = tokenStatusEnum;
     }
 
-    private String generateToken() {
-        Random random = new Random();
-        return String.valueOf(random.nextInt(MIN_VALUE_TOKEN, MAX_VALUE_TOKEN));
-    }
-
-    private Date timeExpiration() {
-        return Date.from(Instant.now().plusSeconds(ADD_SECONDS_EXPIRATION_CODE));
-    }
-
-    private String cryptToken() {
-        return BCrypt.hashpw(this.contentCode, BCrypt.gensalt());
+    @Builder(builderMethodName = "builder")
+    public static Token tokenBuilder(String contentCode, String hashToken, Date createdAt, Date expirationAt, TokenStatusEnum tokenStatusEnum) {
+        return new Token(null, contentCode, hashToken, createdAt, expirationAt, tokenStatusEnum);
     }
 
     private boolean isTokenExpired() {

@@ -1,0 +1,1 @@
+alter table sms rename column sms_type to token_type;
