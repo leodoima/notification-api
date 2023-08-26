@@ -25,6 +25,7 @@ Descrição dos principais itens contidos no desenvolvimento da aplicação:
 * Flyway
 * Java
 * Gradle
+* Swagger
 * Spring Boot
 * [Zenvia](https://www.zenvia.com/) (api externa de comunicação)
 
@@ -46,6 +47,9 @@ $ src/main/resources/application.properties
 
 # Rodar Docker (fará a construção do artefato, criará recursos database, executará aplicação)
 $ docker compose up --build
+
+# Documentação de recursos
+$ http://localhost:8080/swagger-ui/index.html
 ```
 
 </br>
