@@ -59,6 +59,6 @@ Ideias de como evoluir esta aplicação:
 
 - [ ] Implementar recurso de Health Check
 - [ ] Aplicar envio de e-mail
-- [ ] Implementar recurso para documentação da API
+- [x] Implementar recurso para documentação da API
 - [ ] Aplicar testes unitários
 - [ ] Implementar uso de filas para controle de requisições
