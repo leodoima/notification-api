@@ -1,7 +1,6 @@
 package com.notificationapi.controller;
 
 import com.notificationapi.dto.RequestSmsTokenDto;
-import com.notificationapi.dto.ResponseSmsDto;
 import com.notificationapi.service.SmsService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,7 @@ public class SmsController {
     private SmsService smsService;
 
     @PostMapping("/token")
-    public ResponseEntity<ResponseSmsDto> sendToken(@RequestBody @Valid RequestSmsTokenDto request) {
-        smsService.requestToken(request);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> sendToken(@RequestBody @Valid RequestSmsTokenDto request) {
+        return smsService.requestToken(request);
     }
 }

@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 ;
 
@@ -29,18 +31,26 @@ public class SmsService {
     private SmsBuilder smsBuilder;
 
 
-    public void requestToken(RequestSmsTokenDto request) {
+    public ResponseEntity<String> requestToken(RequestSmsTokenDto request) {
         var smsRequest = generateToken(request);
+
+        smsRequest.setStatusSendEnum(sendToken(smsRequest));
         smsRepository.save(smsRequest);
 
-        sendToken(smsRequest);
+        LOGGER.info("Finaly processed sms for TotalVoice");
+
+        if (smsRequest.getStatusSendEnum().equals(StatusSendEnum.SUCCESS)) {
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     public Sms generateToken(RequestSmsTokenDto request) {
         return smsBuilder.smsToken(request);
     }
 
-    public void sendToken(Sms smsModel) {
+    public StatusSendEnum sendToken(Sms smsModel) {
 
         LOGGER.info("Initializing message sending execution to {} to number {}", smsModel.getTokenTypeEnum(), smsModel.getPhoneNumber());
 
@@ -55,13 +65,9 @@ public class SmsService {
 
         } catch (Exception ex) {
             LOGGER.info("Exception error to operate a TotalVoice. {}", ex.getMessage());
-        } finally {
-
-            smsModel.setStatusSendEnum(validStatusSend(result));
-            smsRepository.save(smsModel);
-
-            LOGGER.info("Finaly processed sms for TotalVoice");
         }
+
+        return validStatusSend(result);
     }
 
     private StatusSendEnum validStatusSend(JSONObject resultSend) {
