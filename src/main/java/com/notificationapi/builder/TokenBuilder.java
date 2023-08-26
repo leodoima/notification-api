@@ -2,7 +2,6 @@ package com.notificationapi.builder;
 
 import com.notificationapi.enums.TokenStatusEnum;
 import com.notificationapi.model.Token;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
